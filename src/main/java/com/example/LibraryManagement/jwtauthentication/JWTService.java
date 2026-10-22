@@ -55,22 +55,18 @@ public class JWTService {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public String generateToken(User user){
+    public String generateToken(User user) {
+        HashMap<String, Object> claims = new HashMap<>();
 
-        return generateToken(new HashMap<>(),user);
+        claims.put("roles", user.getRoles());
 
-    }
-
-    public String generateToken(HashMap<String, Object> claims, User user){
-
-        return Jwts
-                .builder()
-                .claims()
+        return Jwts.builder()
+                .claims(claims)
                 .subject(user.getName())
-                .issuedAt(new Date(System.currentTimeMillis()))
+                .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expirationTime))
-                .and().compact();
-
+                .signWith(getSignInKey())
+                .compact();
     }
 
     public boolean isTokenValid(String token , User user){
