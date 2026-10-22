@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // check if the authheader is present and strts with the bearer
 
-        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+        if(authorizationHeader == null && authorizationHeader.startsWith("Bearer ")) {
 
             filterChain.doFilter(request,response);
             return;
